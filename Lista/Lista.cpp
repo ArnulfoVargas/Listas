@@ -65,7 +65,7 @@ public:
 	void PrintList() {
 		Nodo* holder = lista;
 
-		while (lista->nodoSiguiente != nullptr && holder != nullptr) {
+		while (holder != nullptr) {
 			std::cout << "[" << holder->dato << "]->";
 
 			holder = holder->nodoSiguiente;
@@ -114,17 +114,46 @@ public:
 			Nodo* holder = lista;
 			Nodo* previo = lista;
 
-			while (holder->nodoSiguiente != nullptr && holder->dato != nextValue)
+			if (holder->dato == nextValue) InsertFirst(nodeValue);
+			else
 			{
-				if (holder->dato == nextValue) {
-					node->nodoSiguiente = holder;
-					previo->nodoSiguiente = node;
-				 }
+				while (holder != nullptr && holder->dato != nextValue)
+				{
+					previo = holder;
+					holder = holder->nodoSiguiente;
+				}
+
+				node->nodoSiguiente = holder;
+				previo->nodoSiguiente = node;
+			}
+		}
+	}
+
+	void InsertAfter(int afterValue, int nodeValue)
+	{
+		if (lista == nullptr)
+		{
+			lista = new Nodo(nodeValue);
+		} else if (lista != nullptr)
+		{
+			Nodo* holder = lista;
+
+			while (holder != nullptr && holder->dato != afterValue)
+			{
+				holder = holder->nodoSiguiente;
 			}
 
-			lista = previo;
+			if (holder != nullptr)
+			{
+				Nodo* node = new Nodo(nodeValue);
 
-			holder->~Nodo();
+				node->nodoSiguiente = holder->nodoSiguiente;
+				holder->nodoSiguiente = node;
+			}
+			else
+			{
+				InsertLast(nodeValue);
+			}
 		}
 	}
 };
@@ -155,7 +184,19 @@ int main()
 
 	list->PrintList();
 
-	list->InsertBefore(22, 7);
+	list->InsertBefore(5, 7);
+
+	list->PrintList();
+
+	list->InsertAfter(5, 6);
+
+	list->PrintList();
+
+	list->InsertAfter(22, 11);
+
+	list->PrintList();
+
+	list->InsertAfter(10, 22);
 
 	list->PrintList();
 
